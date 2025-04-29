@@ -3,7 +3,7 @@
 using std::cout;
 using boost::typeindex::type_id_with_cvr;
 
-template<class FuncType, class ValueType>
+template<typename FuncType, typename ValueType>
 decltype(auto) call(FuncType func, ValueType value) {
     cout << type_id_with_cvr<FuncType>() << '\n';
     return func(value);
