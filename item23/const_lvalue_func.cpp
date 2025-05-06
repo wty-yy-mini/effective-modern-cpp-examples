@@ -1,11 +1,11 @@
 #include <my_show_type.hpp>
 
-void func(int) { cout << "HI int" << '\n'; }
+// void func(int) { cout << "HI int" << '\n'; }
 // 这个const int定义完全没有意义和int相同, 因为按值传递会自动忽略修饰词const
 // void func(const int) { cout << "HI cont int" << '\n'; }
 
 void func(int&) { cout << "HI int&" << '\n'; }
-// void func(int&&) { cout << "HI int&&" << '\n'; }
+void func(int&&) { cout << "HI int&&" << '\n'; }
 // void func(const int&) { cout << "HI const int&" << '\n'; }
 // void func(const int&&) { cout << "HI const int&&" << '\n'; }
 
