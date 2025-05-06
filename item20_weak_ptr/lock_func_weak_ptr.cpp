@@ -2,7 +2,7 @@
 #include <my_show_type.hpp>
 
 int main() {
-    // 可以说现有sptr再有wptr, 通过wptr来管理全部sptr的存在性
+    // 可以说先有sptr再有wptr, 通过wptr来管理全部sptr的存在性
     auto sptr = std::make_shared<int>(123);
     auto wptr = std::weak_ptr<int>(sptr);
     {
@@ -14,18 +14,20 @@ int main() {
     }
     cout << sptr.use_count() << '\n';  // 1
     auto test_lock = [wptr]() {
-        // 创建指向同一地址的shared ptr对象
+        // 创建指向同一地址的shared ptr对象, 并且可以检查是否存在
         if (auto sptr2 = wptr.lock()) {
             cout << "sptr2=" << *sptr2 << '\n';
             PRINT_TYPE(sptr2);
         } else {
             cout << "Ptr is NULL" << '\n';
         }
+        // 或者通过unexpired检查指针是否释放
+        cout << (wptr.expired() ? "Is expired" : "Unexpired") << '\n';
     };
     {
-        test_lock();
+        test_lock();  // sptr2=123, Unexpired
     }
     sptr.reset();
-    test_lock();
+    test_lock();  // Ptr is NULL, Is expired
     return 0;
 }

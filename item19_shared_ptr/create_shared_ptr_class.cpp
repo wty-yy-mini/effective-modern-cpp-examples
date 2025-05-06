@@ -43,7 +43,7 @@ void test2() {
 
 class Animal2: public std::enable_shared_from_this<Animal2> {
 public:
-    static auto create() {
+    static auto create() {  // 使用工厂函数初始化类, 保证必定有一个control block
         auto del_func = [](Animal2* ptr) {
             cout << "Delete Animal2" << '\n';
             delete ptr;

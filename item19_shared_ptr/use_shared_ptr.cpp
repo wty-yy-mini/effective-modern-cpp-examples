@@ -10,16 +10,15 @@ int main() {
     // 注意: shared_ptr类型中不和删除函数绑定, 这与unique_ptr不同
     {
         std::shared_ptr<int> sptr(new int(8), del_func);
-        cout << sptr.use_count() << '\n';
+        cout << "sptr.use_count=" <<  sptr.use_count() << '\n';
         {
             std::shared_ptr<int> sptr2(sptr);  // sptr2和sptr共用相同的control block
-            cout << sptr.use_count() << ' ' << sptr2.use_count() << '\n';  // 2 2
-        }  // 自动删除sptr2, use_count -= 1
+            cout << "sptr sptr2.use_count=" << sptr.use_count() << ' ' << sptr2.use_count() << '\n';  // 2 2
+        }  // 退出作用于, 自动析构栈上sptr2, use_count -= 1
         cout << "sptr.unique=" << (sptr.unique() ? "True" : "False") << '\n';  // 判断是否是唯一的
-        // sptr.reset();  // reset同样会释放指针, 当use_count=0时, 会自动释放
+        sptr.reset();  // reset同样会释放指针, 当use_count=0时, 调用删除函数删除堆上内存
         cout << "RESET" << '\n';
-    }  // 当use_count=0时, 调用删除函数
-    cout << "END!!!" << '\n';
+    }
 
     // 也可以使用make_shared通过构造函数创建, 使用默认删除函数
     auto sptr = std::make_shared<int>(123);
@@ -31,6 +30,7 @@ int main() {
         // auto sptr2 = std::shared_ptr<int>(ptr);  // 产生两个control block
         // cout << sptr.use_count() << ' ' << sptr2.use_count() << '\n';  // 1 1
     }  // 在退出时, ptr会被连续释放两次, 导致报错!
+    cout << "RETURN 0" << '\n';
 
 
     return 0;
